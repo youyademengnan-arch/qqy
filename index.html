@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页 | 高级版</title>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            animation: fadeIn 1.5s ease;
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #0078d4, #00bcf2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* 按钮样式 */
+        .links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: 1px solid #333;
+            border-radius: 30px;
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: white;
+            color: black;
+            border-color: white;
+            transform: translateY(-5px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>我是 [秦琦垚]</h1>
+        <p>独立开发者 / 数字艺术家 / 极简主义者</p>
+
+        <div class="links">
+            <a href="https://v.douyin.com/Z5QV9eAQ95s/" class="btn">抖音</a>
+            <a href="https://www.tiktok.com/@qykike?_r=1&_t=ZT-963VK56gbEc" class="btn">tiktok</a>
+            <a href="youyademengnan@gmail.com" class="btn">邮箱
+
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
