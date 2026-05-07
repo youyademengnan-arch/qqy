@@ -3,210 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inspiration Node 2026 | Human-AI Terminal</title>
+    <title>Polymer Premium | 独家技术资产</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background-color: #000;
-            color: #00ffcc;
-            font-family: 'Courier New', Courier, monospace;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        :root { --accent: #00aff0; --bg: #000000; --card: #121212; --text: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 50px; }
+        
+        /* 顶部横幅 */
+        .banner { width: 100%; height: 200px; background: linear-gradient(135deg, #00aff0, #0056b3); position: relative; }
+        .avatar-wrap { position: absolute; bottom: -50px; left: 20px; }
+        .avatar { width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--bg); background: #333; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+
+        .content-container { max-width: 1100px; margin: 60px auto 0; display: grid; grid-template-columns: 1.8fr 1fr; gap: 30px; padding: 0 20px; }
+
+        /* 创作者信息 */
+        .profile-info { margin-bottom: 30px; }
+        .profile-info h1 { font-size: 24px; margin-bottom: 5px; }
+        .profile-info p { color: #888; font-size: 14px; }
+
+        /* 动态列表 */
+        .feed { display: flex; flex-direction: column; gap: 20px; }
+        .post { background: var(--card); border-radius: 12px; border: 1px solid #222; overflow: hidden; }
+        .post-header { padding: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+        .post-body { position: relative; width: 100%; height: 300px; background: #1a1a1a; overflow: hidden; }
+        .blur-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=1000') center/cover;
+            filter: blur(25px); opacity: 0.4;
+        }
+        .lock-msg { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.5); z-index: 2;
         }
 
-        /* 背景：数字雨画布 */
-        #matrix {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            opacity: 0.3;
+        /* 侧边订阅栏 */
+        .sidebar { position: sticky; top: 20px; height: fit-content; }
+        .sub-card { background: var(--card); padding: 25px; border-radius: 16px; border: 1px solid var(--accent); box-shadow: 0 0 20px rgba(0, 175, 240, 0.2); }
+        .price-tag { font-size: 32px; font-weight: 800; margin: 15px 0; color: var(--accent); }
+        .sub-btn { 
+            display: block; background: var(--accent); color: white; text-align: center; 
+            padding: 15px; border-radius: 30px; text-decoration: none; font-weight: bold;
+            transition: 0.3s; margin-top: 15px;
         }
+        .sub-btn:hover { transform: scale(1.02); box-shadow: 0 0 15px var(--accent); }
 
-        /* 终端容器 */
-        .terminal {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 600px;
-            background: rgba(0, 15, 10, 0.85);
-            border: 2px solid #00ffcc;
-            padding: 30px;
-            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
-            border-radius: 5px;
-            backdrop-filter: blur(5px);
-        }
+        .stats { display: flex; gap: 20px; margin: 15px 0; font-size: 13px; color: #888; }
+        .stats span { color: white; font-weight: bold; }
 
-        /* 扫描线效果 */
-        .terminal::before {
-            content: " ";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-        }
-
-        .header {
-            font-size: 12px;
-            border-bottom: 1px solid #00ffcc44;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .title {
-            font-size: 28px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px #00ffcc;
-        }
-
-        .data-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-            font-size: 14px;
-            color: #88ffeb;
-        }
-
-        .data-item {
-            border: 1px solid #00ffcc22;
-            padding: 10px;
-            background: rgba(0, 255, 204, 0.05);
-        }
-
-        .label { color: #555; display: block; font-size: 10px; margin-bottom: 5px; }
-
-        .message {
-            font-size: 15px;
-            line-height: 1.6;
-            margin: 20px 0;
-            color: #fff;
-            border-left: 3px solid #00ffcc;
-            padding-left: 15px;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #00ffcc;
-            color: #00ffcc;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-weight: bold;
-            letter-spacing: 2px;
-            transition: all 0.3s;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        .btn:hover {
-            background: #00ffcc;
-            color: #000;
-            box-shadow: 0 0 25px #00ffcc;
-        }
-
-        /* 呼吸灯动画 */
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        .live-dot {
-            height: 8px; width: 8px; background: #ff3366;
-            border-radius: 50%; display: inline-block;
-            margin-right: 5px; animation: pulse 1s infinite;
-        }
+        @media (max-width: 850px) { .content-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <canvas id="matrix"></canvas>
-
-    <div class="terminal">
-        <div class="header">
-            <span><span class="live-dot"></span> CONNECTION: SECURE</span>
-            <span>OS: GEMINI_CORE_v3.0</span>
-        </div>
-        
-        <div class="title">灵感中转站</div>
-        
-        <div class="message">
-            警告：你正在进入人类与 AI 协作的深度实验区。在这里，传统逻辑正在重构，所有输出均由碳基直觉与硅基算法共同驱动。
-        </div>
-
-        <div class="data-grid">
-            <div class="data-item">
-                <span class="label">CORE_TEMP</span>
-                <span id="temp">36.5</span>°C
-            </div>
-            <div class="data-item">
-                <span class="label">NEURAL_SYNC</span>
-                <span id="sync">99.8</span>%
-            </div>
-            <div class="data-item">
-                <span class="label">UPTIME</span>
-                <span id="uptime">0</span>s
-            </div>
-            <div class="data-item">
-                <span class="label">STATUS</span>
-                <span>EVOLVING</span>
-            </div>
-        </div>
-
-        <a href="https://github.com/youyademengnan-arch" target="_blank" class="btn">启动同步协议</a>
+    <div class="banner"></div>
+    <div class="avatar-wrap">
+        <div class="avatar">🔬</div>
     </div>
 
-    <script>
-        // 背景数字雨
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
+    <div class="content-container">
+        <div class="feed">
+            <div class="profile-info">
+                <h1>QQY | 高分子技术实验室</h1>
+                <p>@poly_tech_premium • 2026 核心资产订阅</p>
+                <div class="stats">
+                    <span>124</span> 贴文 · <span>8.5k</span> 订阅 · <span>42</span> 核心文件
+                </div>
+                <p style="margin-top: 10px; color: #ccc; font-size: 14px;">
+                    专注高分子材料领域中日双语技术壁垒突破。订阅解锁考研笔记、模具设计图纸及行业内推资源。
+                </p>
+            </div>
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+            <div class="post">
+                <div class="post-header">
+                    <span>Exclusive Content</span>
+                    <span style="color: var(--accent);">5 分钟前</span>
+                </div>
+                <div class="post-body">
+                    <div class="blur-overlay"></div>
+                    <div class="lock-msg">
+                        <span style="font-size: 40px;">🔒</span>
+                        <p style="margin-top: 10px; font-weight: bold;">解锁 2026 特斯拉供应链名单(日方)</p>
+                        <p style="font-size: 12px; color: #aaa;">仅限订阅会员访问</p>
+                    </div>
+                </div>
+            </div>
 
-        const words = "01010101010101010101010101010101ABCDEFHIJKLMNOPQRSTUVWXYZ";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const drops = [];
+            <div class="post">
+                <div class="post-header">
+                    <span>Exclusive Document</span>
+                    <span style="color: var(--accent);">2 小时前</span>
+                </div>
+                <div class="post-body">
+                    <div class="blur-overlay" style="background-image: url('https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000');"></div>
+                    <div class="lock-msg">
+                        <span style="font-size: 40px;">📄</span>
+                        <p style="margin-top: 10px; font-weight: bold;">JLPT N2 考前押题 - 工业日语篇</p>
+                        <p style="font-size: 12px; color: #aaa;">包含 500+ 垂直领域高频词汇</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        for (let x = 0; x < columns; x++) drops[x] = 1;
+        <div class="sidebar">
+            <div class="sub-card">
+                <h3 style="text-transform: uppercase; font-size: 13px; color: #888; letter-spacing: 1px;">订阅计划</h3>
+                <div class="price-tag">￥99.00 <span style="font-size: 14px; color: #555;">/ 月</span></div>
+                <p style="font-size: 13px; color: #aaa; margin-bottom: 20px;">
+                    解锁所有历史存档、专属私信咨询位、以及每周更新的技术周报。
+                </p>
+                <a href="https://aifadian.com" class="sub-btn">立即订阅</a>
+                <p style="text-align: center; font-size: 11px; color: #444; margin-top: 15px;">
+                    注：付款后请通过私信凭证获取专属入口
+                </p>
+            </div>
+            
+            <div style="margin-top: 20px; font-size: 12px; color: #444; text-align: center;">
+                © 2026 QQY TECH. 非公开内容受版权保护。
+            </div>
+        </div>
+    </div>
 
-        function draw() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#00ffcc";
-            ctx.font = fontSize + "px arial";
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = words.charAt(Math.floor(Math.random() * words.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            }
-        }
-        setInterval(draw, 33);
-
-        // 动态数据模拟
-        let startTime = Date.now();
-        setInterval(() => {
-            document.getElementById('uptime').innerText = Math.floor((Date.now() - startTime) / 1000);
-            document.getElementById('temp').innerText = (36 + Math.random() * 0.5).toFixed(1);
-            document.getElementById('sync').innerText = (99 + Math.random() * 0.9).toFixed(1);
-        }, 1000);
-    </script>
 </body>
 </html>
