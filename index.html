@@ -1,92 +1,72 @@
 <!DOCTYPE html>
-<html lang="zh">
-
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人主页 | 高级版</title>
+    <title>我的个人主页</title>
     <style>
         body {
-            background: #0a0a0a;
-            color: white;
-            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #0f172a, #334155); /* 深邃背景色 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        .container {
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px); /* 磨砂玻璃效果 */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 24px;
             text-align: center;
-            animation: fadeIn 1.5s ease;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 350px;
+            width: 90%;
         }
 
-        h1 {
-            font-size: 3rem;
-            background: linear-gradient(45deg, #0078d4, #00bcf2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        p {
-            color: #888;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-        }
-
-        /* 按钮样式 */
-        .links {
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background: #38bdf8; /* 暂时代替头像的圆圈 */
+            border-radius: 50%;
+            margin: 0 auto 20px;
             display: flex;
-            gap: 15px;
             justify-content: center;
+            align-items: center;
+            font-size: 40px;
         }
+
+        h1 { margin: 10px 0; font-size: 24px; }
+        p { color: #94a3b8; font-size: 16px; line-height: 1.6; }
 
         .btn {
-            padding: 10px 25px;
-            border: 1px solid #333;
-            border-radius: 30px;
-            color: white;
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: #38bdf8;
+            color: #0f172a;
             text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
             transition: 0.3s;
-            font-size: 0.9rem;
         }
 
-        .btn:hover {
-            background: white;
-            color: black;
-            border-color: white;
-            transform: translateY(-5px);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        .btn:hover { transform: scale(1.05); background: #7dd3fc; }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>我是 [秦琦垚]</h1>
-        <p>独立开发者 / 数字艺术家 / 极简主义者</p>
 
-        <div class="links">
-            <a href="https://v.douyin.com/Z5QV9eAQ95s/" class="btn">抖音</a>
-            <a href="https://www.tiktok.com/@qykike?_r=1&_t=ZT-963VK56gbEc" class="btn">tiktok</a>
-            <a href="youyademengnan@gmail.com" class="btn">邮箱
-
-            </a>
-        </div>
+    <div class="card">
+        <div class="avatar">🚀</div>
+        <h1>你好，我是 QQY</h1>
+        <p>这是我亲手搭建的第一个个人主页。<br>在这里，我将记录学习和成长的点滴。</p>
+        <a href="#" class="btn">联系我</a>
     </div>
-</body>
 
+</body>
 </html>
