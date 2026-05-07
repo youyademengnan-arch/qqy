@@ -3,70 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人主页</title>
+    <title>Inspiration Node 2026 | Human-AI Terminal</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            margin: 0;
-            padding: 0;
+            background-color: #000;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(45deg, #0f172a, #334155); /* 深邃背景色 */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px); /* 磨砂玻璃效果 */
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 40px;
-            border-radius: 24px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            max-width: 350px;
+        /* 背景：数字雨画布 */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        /* 终端容器 */
+        .terminal {
+            position: relative;
+            z-index: 10;
             width: 90%;
+            max-width: 600px;
+            background: rgba(0, 15, 10, 0.85);
+            border: 2px solid #00ffcc;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
         }
 
-        .avatar {
-            width: 100px;
-            height: 100px;
-            background: #38bdf8; /* 暂时代替头像的圆圈 */
-            border-radius: 50%;
-            margin: 0 auto 20px;
+        /* 扫描线效果 */
+        .terminal::before {
+            content: " ";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .header {
+            font-size: 12px;
+            border-bottom: 1px solid #00ffcc44;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 40px;
+            justify-content: space-between;
         }
 
-        h1 { margin: 10px 0; font-size: 24px; }
-        p { color: #94a3b8; font-size: 16px; line-height: 1.6; }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #00ffcc;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+            font-size: 14px;
+            color: #88ffeb;
+        }
+
+        .data-item {
+            border: 1px solid #00ffcc22;
+            padding: 10px;
+            background: rgba(0, 255, 204, 0.05);
+        }
+
+        .label { color: #555; display: block; font-size: 10px; margin-bottom: 5px; }
+
+        .message {
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 20px 0;
+            color: #fff;
+            border-left: 3px solid #00ffcc;
+            padding-left: 15px;
+        }
 
         .btn {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 12px 30px;
-            background: #38bdf8;
-            color: #0f172a;
+            display: block;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
             text-decoration: none;
-            border-radius: 50px;
+            text-transform: uppercase;
             font-weight: bold;
-            transition: 0.3s;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            cursor: pointer;
+            margin-top: 20px;
         }
 
-        .btn:hover { transform: scale(1.05); background: #7dd3fc; }
+        .btn:hover {
+            background: #00ffcc;
+            color: #000;
+            box-shadow: 0 0 25px #00ffcc;
+        }
+
+        /* 呼吸灯动画 */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .live-dot {
+            height: 8px; width: 8px; background: #ff3366;
+            border-radius: 50%; display: inline-block;
+            margin-right: 5px; animation: pulse 1s infinite;
+        }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="avatar">🚀</div>
-        <h1>你好，我是 QQY</h1>
-        <p>这是我亲手搭建的第一个个人主页。<br>在这里，我将记录学习和成长的点滴。</p>
-        <a href="#" class="btn">联系我</a>
+    <canvas id="matrix"></canvas>
+
+    <div class="terminal">
+        <div class="header">
+            <span><span class="live-dot"></span> CONNECTION: SECURE</span>
+            <span>OS: GEMINI_CORE_v3.0</span>
+        </div>
+        
+        <div class="title">灵感中转站</div>
+        
+        <div class="message">
+            警告：你正在进入人类与 AI 协作的深度实验区。在这里，传统逻辑正在重构，所有输出均由碳基直觉与硅基算法共同驱动。
+        </div>
+
+        <div class="data-grid">
+            <div class="data-item">
+                <span class="label">CORE_TEMP</span>
+                <span id="temp">36.5</span>°C
+            </div>
+            <div class="data-item">
+                <span class="label">NEURAL_SYNC</span>
+                <span id="sync">99.8</span>%
+            </div>
+            <div class="data-item">
+                <span class="label">UPTIME</span>
+                <span id="uptime">0</span>s
+            </div>
+            <div class="data-item">
+                <span class="label">STATUS</span>
+                <span>EVOLVING</span>
+            </div>
+        </div>
+
+        <a href="https://github.com/youyademengnan-arch" target="_blank" class="btn">启动同步协议</a>
     </div>
 
+    <script>
+        // 背景数字雨
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const words = "01010101010101010101010101010101ABCDEFHIJKLMNOPQRSTUVWXYZ";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ffcc";
+            ctx.font = fontSize + "px arial";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = words.charAt(Math.floor(Math.random() * words.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 33);
+
+        // 动态数据模拟
+        let startTime = Date.now();
+        setInterval(() => {
+            document.getElementById('uptime').innerText = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('temp').innerText = (36 + Math.random() * 0.5).toFixed(1);
+            document.getElementById('sync').innerText = (99 + Math.random() * 0.9).toFixed(1);
+        }, 1000);
+    </script>
 </body>
 </html>
